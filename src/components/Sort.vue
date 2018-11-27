@@ -8,8 +8,12 @@
 </template>
 
 <script>
+
+import store from '../store.js'
+
 export default {
     name: "SortComponent",
+    store,
     props: {
         value: String
     },
@@ -40,7 +44,8 @@ export default {
     },
     methods: {
         onChange(e) {
-            this.$emit('updateActiveSort', e.target.value)
+            store.commit("SORT_DYNAMICALLY" , e.target.value)
+            // this.$emit('updateActiveSort', e.target.value)
         }
     }
 }

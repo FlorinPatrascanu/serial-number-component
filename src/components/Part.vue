@@ -7,7 +7,7 @@
     <div v-bind:class="{'col-xs-6' : list , 'col-xs-12' : !list }">
         <p class="part-number">{{part.number}}</p>
         <p class="part-name">{{part.name}}</p>
-        <p v-if="!list" class="part-price">{{part.price | currency}}</p>
+        <p v-if="!list" class="part-price">{{part.price}}</p>
         <div v-if="list" class="d-flex">
             <p v-if="parseInt(part.stock) > 0" class="part-stock">
                 <i class="fa fa-check"></i> {{part.stock}} available

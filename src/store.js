@@ -80,6 +80,27 @@ const store = new Vuex.Store({
         UPDATE_APPLIED_FILTER(state , filter) {
           state.appliedFilter = filter;
         },
+
+        SORT_DYNAMICALLY(state , sort) {
+          switch(sort) {
+              case "byDescriptionAsc" :
+                  state.parts.sort((a,b) => { return a.name > b.name ? 1 : -1 })
+              break;
+
+              case "byDescriptionDesc" : 
+                  state.parts.sort((a,b) => { return a.name < b.name ? 1 : -1 })
+              break;
+
+              case "byPartNumberAsc" :
+                  state.parts.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
+              break;
+
+              case "byPartNumberDesc" :
+                  state.parts.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
+              break;
+          }
+        
+        },
 				
 				SET_PART_FAVORITE (state,part) {
 

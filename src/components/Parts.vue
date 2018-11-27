@@ -7,9 +7,10 @@
             </div>
             <!-- @updateActiveSort represents the $emit event coming from SortComponent
                   updateActiveSort is the method that binds together the current value of the sort
-            -->
             <SortComponent :value="activeSort" @updateActiveSort="updateActiveSort"/>
-            
+            -->
+            <SortComponent/>
+
             <div class="col-md-4 d-flex d-flex-justify-end">
                 <button class="btn btn-default mr-1" @click="makeList(true)"><i class="fa fa-th-list text-primary-color"></i></button>
                 <button class="btn btn-default" @click="makeList(false)"><i class="fa fa-th text-primary-color"></i></button>
@@ -80,6 +81,10 @@ export default {
         }
     },
 
+    mounted() {
+        store.commit("SORT_DYNAMICALLY" , this.activeSort)
+    },
+
     computed: {
 
         _parts: function() {
@@ -96,28 +101,7 @@ export default {
 
             }
 
-            if(this.activeSort) {
-                switch(this.activeSort) {
-                    case "byDescriptionAsc" :
-                        temp = temp.sort((a,b) => { return a.name > b.name ? 1 : -1 })
-                    break;
-
-                    case "byDescriptionDesc" : 
-                        temp = temp.sort((a,b) => { return a.name < b.name ? 1 : -1 })
-                    break;
-
-                    case "byPartNumberAsc" :
-                        temp = temp.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
-                    break;
-
-                    case "byPartNumberDesc" :
-                        temp = temp.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
-                    break;
-                }
-            }
-
-            return temp
-
+            return temp;
             
         }
 
