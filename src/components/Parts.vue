@@ -65,7 +65,7 @@ export default {
     data: function() {
         return {
             paginate: ["_parts"],
-            activeSort: "byDescriptionAsc",
+            activeSort: store.getters.GET_CURRENT_SORT,
             isList: true,
             itemsToShow: 10
         }
@@ -78,17 +78,15 @@ export default {
         makeList: function(param) {      
             param == true ? this.isList = true : this.isList = false;
             param == true ? this.itemsToShow = 10 : this.itemsToShow = 12;
-        }
+				}
+				
     },
 
-    mounted() {
-        store.commit("SORT_DYNAMICALLY" , this.activeSort)
-    },
 
     computed: {
 
         _parts: function() {
-            let temp = store.getters.GET_PARTS
+            let temp = store.getters.GET_PARTS;
 
 
             if(this.refine) {

@@ -11,6 +11,7 @@ const store = new Vuex.Store({
       // original dataset
       origin: [],
       appliedFilter: "",
+      appliedSort:"byDescriptionAsc",
       // hardcoded filters
       filters: [
         {
@@ -81,24 +82,28 @@ const store = new Vuex.Store({
           state.appliedFilter = filter;
         },
 
+        UPDATE_APPLIED_SORT(state , sort) {
+          state.appliedSort = sort;
+        },
+
         SORT_DYNAMICALLY(state , sort) {
           switch(sort) {
-              case "byDescriptionAsc" :
-                  state.parts.sort((a,b) => { return a.name > b.name ? 1 : -1 })
-              break;
+            case "byDescriptionAsc" :
+                state.parts.sort((a,b) => { return a.name > b.name ? 1 : -1 })
+            break;
 
-              case "byDescriptionDesc" : 
-                  state.parts.sort((a,b) => { return a.name < b.name ? 1 : -1 })
-              break;
+            case "byDescriptionDesc" : 
+                state.parts.sort((a,b) => { return a.name < b.name ? 1 : -1 })
+            break;
 
-              case "byPartNumberAsc" :
-                  state.parts.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
-              break;
+            case "byPartNumberAsc" :
+                state.parts.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
+            break;
 
-              case "byPartNumberDesc" :
-                  state.parts.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
-              break;
-          }
+            case "byPartNumberDesc" :
+                state.parts.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
+            break;
+        }
         
         },
 				
@@ -140,22 +145,35 @@ const store = new Vuex.Store({
             axios.get("http://localhost:4000/data")
                  .then(r => r.data)
                  .then(parts => {
+
+
+                  // sort the parts byDescriptionAsc by default
+                  parts.sort((a,b) => { return a.name > b.name ? 1 : -1 });
+
+
                    commit("SET_PARTS" , parts)
                    commit("SET_ORIGIN" , parts)
                  })
                  .catch(err => console.log(err))
         },
 
-        filterPartsByCategory ({ commit , state } , filter) {
-            let out = state.origin.filter(o => o.parentGroupNames.includes(filter))
-            commit("SET_PARTS" , out);
-            
+        filterPartsByCategory ({ commit , state } , params ) {
+            let out = state.origin.filter(o => o.parentGroupNames.includes(params.currentFilter))
+            commit("SET_PARTS" , out);    
+            commit("UPDATE_APPLIED_FILTER" , params.currentFilter);
+            commit("SORT_DYNAMICALLY" , state , params.currentSort);
+        },
+
+        setSortFilter ({ commit , state } , currSort) {
+          console.log("WILL UPDATE WITH AND TRIGER : " , currSort)
+          // commit("UPDATE_APPLIED_SORT" , state.appliedSort);
         },
 
         removeFilters ({ commit , state }) {
-          // when reseting filters , show original array of parts
+          // when reseting filters , show original array of parts - and original sorting
           commit("SET_PARTS" , state.origin)
           commit("UPDATE_APPLIED_FILTER" , "")
+          console.log(state.appliedSort);
         }
   
     },
@@ -163,6 +181,8 @@ const store = new Vuex.Store({
     getters: {
   
       GET_PARTS: state => {
+        // when passing parts to the computed property
+        // update the parts with minimum quantity
         return state.parts.reduce((r,v,k) => {
           v.hasOwnProperty("customField_MinimumQuantity") ? v._quantity = v.customField_MinimumQuantity : v._quantity = 1;
           r = [...r,v];
@@ -176,6 +196,10 @@ const store = new Vuex.Store({
 
       GET_CURRENT_FILTER: state => {
         return state.appliedFilter
+      },
+
+      GET_CURRENT_SORT: state => {
+        return state.appliedSort
       }
       
     }

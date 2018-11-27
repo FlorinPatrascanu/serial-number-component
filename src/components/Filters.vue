@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <h3>Categories</h3>
             <label v-for="(filter,index) in filters" :key="index" class="label-custom">
-                    <input type="radio" :value="filter.category" v-model="currentFilter">
+                    <input type="radio" :value="filter.category" @change="updateFilter(filter)" v-model="currentFilter">
                     <b>{{filter.category}}</b>
             </label>
         </div>
@@ -31,20 +31,23 @@ export default {
 
         }
     },
-    watch: {
-        currentFilter: function(val) {
-            if(val != "") {
-                console.log(val);
-                store.commit("UPDATE_APPLIED_FILTER" , val);
-                store.dispatch("filterPartsByCategory" , val);
-            } 
-        }
-    },
     methods: {
         removeFilters() {
             store.dispatch("removeFilters" , "");
             this.currentFilter = "";
             // store.dispatch("loadParts");
+        },
+        updateFilter(filter) {
+            let currSort = store.getters.GET_CURRENT_SORT;
+
+            let params = {
+                currentSort : currSort,
+                currentFilter: filter.category
+            }
+
+            console.log("can we send an object to vuex action ? " , params);
+
+            store.dispatch("filterPartsByCategory" , params);
         }
     }
 }
