@@ -18,6 +18,8 @@
 <script>
 
 import store from '../store.js'
+import vuex from 'vuex'
+import { mapActions } from 'vuex'
 
 
 export default {
@@ -27,11 +29,25 @@ export default {
         return {
             currentFilter: "",
             filters: store.getters.GET_FILTERS,
-            parts: store.getters.GET_PARTS
+            parts: store.getters.GET_PARTS,
+            currSort : store.getters.GET_CURRENT_SORT
 
         }
     },
     methods: {
+
+        ...mapActions([
+            'removeFilters',
+            'filterPartsByCategory'
+        ]),
+
+
+        // ...mapActions({
+        //     removeFilters: 'removeFilters',
+        //     updateFilter: 'filterPartsByCategory(store.getters.GET_CURRENT_SORT , store.getters.GET_FILTERS)'
+        // }),
+
+
         removeFilters() {
             store.dispatch("removeFilters" , "");
             this.currentFilter = "";
@@ -45,7 +61,7 @@ export default {
                 currentFilter: filter.category
             }
 
-            console.log("can we send an object to vuex action ? " , params);
+            // console.log("can we send an object to vuex action ? " , params);
 
             store.dispatch("filterPartsByCategory" , params);
         }

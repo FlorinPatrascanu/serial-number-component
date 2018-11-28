@@ -145,12 +145,8 @@ const store = new Vuex.Store({
             axios.get("http://localhost:4000/data")
                  .then(r => r.data)
                  .then(parts => {
-
-
                   // sort the parts byDescriptionAsc by default
-                  parts.sort((a,b) => { return a.name > b.name ? 1 : -1 });
-
-
+                  // parts.sort((a,b) => { return a.name > b.name ? 1 : -1 });
                    commit("SET_PARTS" , parts)
                    commit("SET_ORIGIN" , parts)
                  })
@@ -159,9 +155,27 @@ const store = new Vuex.Store({
 
         filterPartsByCategory ({ commit , state } , params ) {
             let out = state.origin.filter(o => o.parentGroupNames.includes(params.currentFilter))
+
+            // check active sort when filtering by category
+            switch(params.currentSort) {
+              case "byDescriptionAsc" :
+                  out.sort((a,b) => { return a.name > b.name ? 1 : -1 })
+              break;
+
+              case "byDescriptionDesc" : 
+                  out.sort((a,b) => { return a.name < b.name ? 1 : -1 })
+              break;
+
+              case "byPartNumberAsc" :
+                  out.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
+              break;
+
+              case "byPartNumberDesc" :
+                  out.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
+              break;
+            }
             commit("SET_PARTS" , out);    
             commit("UPDATE_APPLIED_FILTER" , params.currentFilter);
-            commit("SORT_DYNAMICALLY" , state , params.currentSort);
         },
 
         setSortFilter ({ commit , state } , currSort) {

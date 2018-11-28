@@ -56,7 +56,8 @@ export default {
   data: function() { 
     return {
       refineSearch: "",
-      refineKeyword: ""
+      refineKeyword: "",
+      defaultSort: store.getters.GET_CURRENT_SORT,
     }
     
   },
