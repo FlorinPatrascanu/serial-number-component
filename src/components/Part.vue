@@ -161,6 +161,16 @@ ul {
     cursor: not-allowed;
 }
 
+.paginate-links li.number {
+    border: 2px solid white;
+    padding: 0.25em;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 12px;
+}
+
 .paginate-links .number a {
     color: white;
     cursor: pointer;
@@ -168,6 +178,6 @@ ul {
 
 .paginate-links .number.active a {
     color: black;
-    text-decoration: underline;
+
 } 
 </style>

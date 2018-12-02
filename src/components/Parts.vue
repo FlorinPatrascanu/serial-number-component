@@ -17,7 +17,9 @@
             </div>
 		</div>
 
-        <div class="col-md-12" v-if="_parts.length > 0">
+
+        <div class="col-md-12 ml-1" v-if="_parts.length > 0">
+            
             <paginate ref="paginator" name="_parts" :list="_parts" :per="itemsToShow" class="col-md-12 paginate-list d-flex d-flex-wrap">
                 <Part v-for="(part,index) in paginated('_parts')" :part="part" :key="index" :list="isList"/>
             </paginate>
@@ -27,7 +29,8 @@
         </div>
 
         <div class="col-md-12" v-else>
-            <span class="col-md-12 no-results">No results matched your filter criteria</span>
+            <span class="col-md-12 no-results">No results matched your filtering criteria.</span>
+
         </div>
 
     </div>
@@ -78,7 +81,7 @@ export default {
         makeList: function(param) {      
             param == true ? this.isList = true : this.isList = false;
             param == true ? this.itemsToShow = 10 : this.itemsToShow = 12;
-				}
+		}
 				
     },
 

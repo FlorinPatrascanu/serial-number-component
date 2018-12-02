@@ -109,14 +109,9 @@ const store = new Vuex.Store({
 				
 				SET_PART_FAVORITE (state,part) {
 
-					state.parts.reduce((r,v,k) => {
-						if(part.id == v.id) {
-							v.isFavorite = true;
-						}
-						r = [...r , v];
-						return r;
-					},[]);
-		
+          state.parts.filter(o => {
+            return o.id == part.id
+          })[0].isFavorite = true;		
 				
 					// update part is Favorite with Ajax call /Default.aspx?ID=FAVID&ADDToFavorite..
 					// use promise , and if the promise status is ok , make the reduce on the state.parts
@@ -124,13 +119,10 @@ const store = new Vuex.Store({
 		
 		
 				REMOVE_PART_FAVORITE (state,part) {
-					state.parts.reduce((r,v,k) => {
-						if(part.id == v.id) {
-							v.isFavorite = false;
-						}
-						r = [...r , v];
-						return r;
-					},[]);
+
+          state.parts.filter(o => {
+            return o.id == part.id
+          })[0].isFavorite = false;
 		
 					// update part is Favorite with Ajax call /Default.aspx?ID=FAVID&REMOVEToFavorite..
         }
@@ -146,36 +138,17 @@ const store = new Vuex.Store({
                  .then(r => r.data)
                  .then(parts => {
                   // sort the parts byDescriptionAsc by default
-                  // parts.sort((a,b) => { return a.name > b.name ? 1 : -1 });
+                   parts.sort((a,b) => { return a.name > b.name ? 1 : -1 });
                    commit("SET_PARTS" , parts)
                    commit("SET_ORIGIN" , parts)
                  })
                  .catch(err => console.log(err))
         },
 
-        filterPartsByCategory ({ commit , state } , params ) {
-            let out = state.origin.filter(o => o.parentGroupNames.includes(params.currentFilter))
-
-            // check active sort when filtering by category
-            switch(params.currentSort) {
-              case "byDescriptionAsc" :
-                  out.sort((a,b) => { return a.name > b.name ? 1 : -1 })
-              break;
-
-              case "byDescriptionDesc" : 
-                  out.sort((a,b) => { return a.name < b.name ? 1 : -1 })
-              break;
-
-              case "byPartNumberAsc" :
-                  out.sort((a,b) => { return +parseInt(a.number) - +parseInt(b.number)})
-              break;
-
-              case "byPartNumberDesc" :
-                  out.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
-              break;
-            }
+        filterPartsByCategory ({ commit , state } , filter ) {
+            let out = state.origin.filter(o => o.parentGroupNames.includes(filter))
             commit("SET_PARTS" , out);    
-            commit("UPDATE_APPLIED_FILTER" , params.currentFilter);
+            commit("UPDATE_APPLIED_FILTER" , filter);
         },
 
         setSortFilter ({ commit , state } , currSort) {
@@ -215,8 +188,31 @@ const store = new Vuex.Store({
       GET_CURRENT_SORT: state => {
         return state.appliedSort
       }
+
+      // GET_FILTERS_COUNT: state => {
+      //   console.log(state.filters);
+
+      //   return state.filters.reduce((r,v,k) => {
+
+      //     v.count = state.parts.filter(o => {
+      //       return o.parentGroupNames.includes(v.category)
+      //     }).length;
+
+      //     r = [...r , v];
+
+      //     return r
+      //   },[])
+
+      //   console.log("FILTERS WITH COUNT" , state.filters);
+      // }
+
       
     }
+  });
+
+  store.watch((state) => state.appliedFilter , (val) => {
+    // console.log("watcher from vuex" , val);
+    store.commit("SORT_DYNAMICALLY" , store.getters.GET_CURRENT_SORT)
   })
 
   

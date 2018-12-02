@@ -43,10 +43,6 @@ export default {
 
 
     },
-
-    created() {
-        console.log(this.defaultSort , store)
-    },
     methods: {
         onChange(e) {
             store.commit("SORT_DYNAMICALLY" , e.target.value)  

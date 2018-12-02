@@ -1,16 +1,16 @@
 <template>
   <div class="container" id="app">
-    <div class="row">
-      <!-- Serial # Search Input Wrapper -->
+
+    <!-- Serial # Search Input Wrapper -->
+    <div class="row mb-3">
+      <div class="col-md-6 col-md-offset-3" id="SubmitSerialNumberWrapper">
+        <input class="form-control" type="search" placeholder="Search Serial #">
+        <button @click="fetchParts" class="btn btn-default"><i class="fa fa-search"></i>Search</button>
+      </div>
     </div>
 
-    <h3>Active filter {{activeFilter}}</h3>
-    <h3>Refine Search {{refineSearch}}</h3>
 
-    <div class="row">
-
-
-     
+    <div class="row">     
       <div class="col-md-12">
 
         <!-- Refine Search & Filters Wrapper -->
@@ -73,7 +73,12 @@ export default {
       if(query != "") {
         this.refineSearch = query;
       }
+    },
+
+    fetchParts() {
+      this.$store.dispatch("loadParts")
     }
+
   },
   computed: {
     activeFilter : {
@@ -84,7 +89,7 @@ export default {
   },
   mounted() {
     // fetch parts when App loads
-    this.$store.dispatch("loadParts")
+    // this.$store.dispatch("loadParts")
   },
   watch : {
     refineKeyword(val) {
@@ -100,7 +105,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu Condensed', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -192,6 +197,34 @@ export default {
   width: 75px;
 }
 
+
+#SubmitSerialNumberWrapper {
+  display: flex;
+
+}
+
+#SubmitSerialNumberWrapper input {
+  margin-right: 1em;
+}
+
+#SubmitSerialNumberWrapper button {
+  background-color: #457fca;
+  color: white;
+  border: 0;
+} 
+
+#SubmitSerialNumberWrapper i {
+  margin-right: 0.5em;
+}
+
+
+.mb-3 {
+  margin-bottom: 3em;
+}
+
+.ml-1 {
+  margin-left: 1em;
+}
 </style>
 
 

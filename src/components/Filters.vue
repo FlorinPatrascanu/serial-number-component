@@ -9,7 +9,7 @@
         </div>
 
         <div class="col-md-12 reset-filters-wrapper">
-            <button class="btn btn-danger" @click="removeFilters" v-if="currentFilter != ''">Reset Filters</button>
+            <button class="btn btn-danger" @click="removeFilters" v-if="currentFilter != ''">Reset Categories</button>
         </div>
     </div>
 </template>
@@ -29,8 +29,7 @@ export default {
         return {
             currentFilter: "",
             filters: store.getters.GET_FILTERS,
-            parts: store.getters.GET_PARTS,
-            currSort : store.getters.GET_CURRENT_SORT
+            parts: store.getters.GET_PARTS
 
         }
     },
@@ -51,19 +50,9 @@ export default {
         removeFilters() {
             store.dispatch("removeFilters" , "");
             this.currentFilter = "";
-            // store.dispatch("loadParts");
         },
         updateFilter(filter) {
-            let currSort = store.getters.GET_CURRENT_SORT;
-
-            let params = {
-                currentSort : currSort,
-                currentFilter: filter.category
-            }
-
-            // console.log("can we send an object to vuex action ? " , params);
-
-            store.dispatch("filterPartsByCategory" , params);
+            store.dispatch("filterPartsByCategory" , filter.category);
         }
     }
 }
