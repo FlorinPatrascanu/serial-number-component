@@ -145,7 +145,7 @@ ul {
 }
 
 .paginate-links {
-    background: linear-gradient(to right, #457fca, #5691c8);
+    background: linear-gradient(to right, #457fca, #c89056);
     padding: 1em !important;
     margin-bottom: 1em !important;
 }

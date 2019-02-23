@@ -27,10 +27,8 @@ export default {
     store,
     data: function() {
         return {
-            currentFilter: "",
             filters: store.getters.GET_FILTERS,
             parts: store.getters.GET_PARTS
-
         }
     },
     methods: {
@@ -49,10 +47,17 @@ export default {
 
         removeFilters() {
             store.dispatch("removeFilters" , "");
-            this.currentFilter = "";
         },
         updateFilter(filter) {
             store.dispatch("filterPartsByCategory" , filter.category);
+        }
+    },
+    computed : {
+        currentFilter: {
+            // we only need to have a get on the current filter - we are using it just for the v-model of the radios
+            // we update the current filter property in VUEX , so the v-model will be set correctly  
+            get(){ return store.getters.GET_CURRENT_FILTER },
+            set( value ){} 
         }
     }
 }

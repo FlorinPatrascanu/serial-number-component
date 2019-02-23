@@ -103,7 +103,7 @@ const store = new Vuex.Store({
             case "byPartNumberDesc" :
                 state.parts.sort((a,b) => { return +parseInt(b.number) - +parseInt(a.number)})
             break;
-        }
+          }
         
         },
 				
@@ -151,16 +151,10 @@ const store = new Vuex.Store({
             commit("UPDATE_APPLIED_FILTER" , filter);
         },
 
-        setSortFilter ({ commit , state } , currSort) {
-          console.log("WILL UPDATE WITH AND TRIGER : " , currSort)
-          // commit("UPDATE_APPLIED_SORT" , state.appliedSort);
-        },
-
         removeFilters ({ commit , state }) {
           // when reseting filters , show original array of parts - and original sorting
           commit("SET_PARTS" , state.origin)
           commit("UPDATE_APPLIED_FILTER" , "")
-          console.log(state.appliedSort);
         }
   
     },
@@ -189,12 +183,14 @@ const store = new Vuex.Store({
         return state.appliedSort
       }
 
+
+      // integrate refine search into counting the filters count
       // GET_FILTERS_COUNT: state => {
       //   console.log(state.filters);
 
       //   return state.filters.reduce((r,v,k) => {
 
-      //     v.count = state.parts.filter(o => {
+      //     v.count = state.origin.filter(o => {
       //       return o.parentGroupNames.includes(v.category)
       //     }).length;
 

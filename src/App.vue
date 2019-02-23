@@ -10,7 +10,7 @@
     </div>
 
 
-    <div class="row">     
+    <div class="row" v-if="this.$store.getters.GET_PARTS.length > 0">     
       <div class="col-md-12">
 
         <!-- Refine Search & Filters Wrapper -->
@@ -23,6 +23,7 @@
 
             <div class="col-md-12 d-flex d-flex-align-center no-padding">
               <input type="text" class="form-control" v-model="refineKeyword">
+              <i class="fa fa-close clear-search" @click="handleClearSearch"></i>
               <i class="fa fa-search refine-search-submitter" @click="handleRefineSearch"></i>
             </div>
 
@@ -72,11 +73,18 @@ export default {
 
       if(query != "") {
         this.refineSearch = query;
-      }
+        store.dispatch("removeFilters" , "");
+      } 
+    },
+
+    handleClearSearch() {
+      // the watcher set on the refineKeyword will clear the refineSearch 
+      this.refineKeyword = "";
     },
 
     fetchParts() {
       this.$store.dispatch("loadParts")
+      // this.$store.getters.GET_FILTERS_COUNT
     }
 
   },
@@ -146,7 +154,7 @@ export default {
 }
 
 .filters-wrapper {
-  background: linear-gradient(to right, #457fca, #5691c8);
+  background: linear-gradient(to right, #457fca, #c89056);
   margin-top: 1em;
 }
 
@@ -166,14 +174,14 @@ export default {
 .no-results {
   padding: 1em;
   color: white;
-  background: linear-gradient(to right, #457fca, #5691c8);
+  background: linear-gradient(to right, #457fca, #c89056);
   margin-top: 5.20em;
 }
 
 .paginator-items-count {
   padding: 1em;
   color: white;
-  background: linear-gradient(to right, #457fca, #5691c8);
+  background: linear-gradient(to right, #457fca, #c89056);
   margin: 1em 1em 2em 1em;
 }
 
@@ -224,6 +232,26 @@ export default {
 
 .ml-1 {
   margin-left: 1em;
+}
+
+.clear-search {
+  position: absolute;
+  cursor: pointer;
+  right: 16%;
+}
+
+@media screen and (max-width: 990px) {
+  .clear-search {
+    right: 7%;
+  }
+}
+
+
+@media screen and (max-width: 470px) {
+  .clear-search {
+    right: 12%;
+  }
+
 }
 </style>
 
